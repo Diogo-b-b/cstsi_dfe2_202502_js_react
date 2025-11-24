@@ -4,11 +4,11 @@ import './App.css'
 
 
 function App() {
-  const [qtdCafeDisponivel, setQtdCafeDisponivel] = useState(3)
+  const [qtdCafeDisponivel, setQtdCafeDisponivel] = useState(0)
   const inputName = useRef(null)
 
   const fazerCafe = nome => new Promise((resolve, reject) => {
-    if (qtdCafeDisponivel <= 0) {
+    if (qtdCafeDisponivel <= 3) {
       return reject('Acabou o café!!!')
     }
     setQtdCafeDisponivel(qtdCafeDisponivel - 1)
@@ -34,6 +34,29 @@ function App() {
     }
   }
 
+  const abasteceCafe = async () => {
+    try {
+      const resultado = await abastecerCafe()//aguarda o retorno da promise
+      console.log(resultado)//executa após a resolução da promise
+      alert(resultado)
+    } catch (error) {
+      console.error(error)
+      alert(`Desculpe não foi possível abastecer o café! ${error}`)
+  }
+}
+
+  const abastecerCafe = nome => new Promise((resolve, reject) => {
+    if (qtdCafeDisponivel > 0) {
+      return reject('Já tem café!')
+    }
+    setQtdCafeDisponivel(qtdCafeDisponivel + 3)
+    console.log(`Preparando o abastecimento de Café!!!`)
+    setTimeout(() => {
+      resolve(`Seu café reabastecido!!!`)
+    }, 5000)
+  })
+  
+
   return (
     <>
       <div>
@@ -48,6 +71,9 @@ function App() {
         <button onClick={() => solicitaCafe()} >
           Pedir um Café!!!
         </button>
+        <button onClick={() => abasteceCafe()} >
+          Reabastecer Maquina de Café!!!
+        </button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
@@ -59,4 +85,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
